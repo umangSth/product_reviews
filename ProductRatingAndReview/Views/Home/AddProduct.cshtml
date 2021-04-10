@@ -1,0 +1,79 @@
+﻿@model ProductRatingAndReview.Models.ViewModel.ProductViewModel
+
+@{
+    ViewBag.Title = "AddProduct";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<main class="my-form my-lg-5">
+    <div class="cotainer">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header"><h3>Signup</h3></div>
+                    <div class="card-body">
+                        @using (Html.BeginForm())
+                        {
+                            @Html.AntiForgeryToken()
+
+                            <div class="form-horizontal">
+                                <h4>ProductTB</h4>
+                                <hr />
+                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                
+
+                                <div class="form-group  row">
+                                    @Html.LabelFor(model => model.ProductName, htmlAttributes: new { @class = "col-md-4 col-form-label text-md-right" })
+                                    <div class="col-md-6">
+                                        @Html.TextBoxFor(model => model.ProductName,  new { @class = "form-control"  })
+                                        @Html.ValidationMessageFor(model => model.ProductName, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group  row">
+                                    @Html.LabelFor(model => model.ProductDetail, htmlAttributes: new { @class = "col-md-4 col-form-label text-md-right" })
+                                    <div class="col-md-6">
+                                        @Html.TextBoxFor(model => model.ProductDetail, new { @class = "form-control"  })
+                                        @Html.ValidationMessageFor(model => model.ProductDetail, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group  row">
+                                    @Html.LabelFor(model => model.ProductImageUrl, htmlAttributes: new { @class = "col-md-4 col-form-label text-md-right" })
+                                    <div class="col-md-6">
+                                        @Html.TextBoxFor(model => model.ProductImageUrl,  new { @class = "form-control"  })
+                                        @Html.ValidationMessageFor(model => model.ProductImageUrl, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group  row">
+                                    @Html.LabelFor(model => model.Price, htmlAttributes: new { @class = "col-md-4 col-form-label text-md-right" })
+                                    <div class="col-md-6">
+                                        @Html.TextBoxFor(model => model.Price,  new { @class = "form-control"  })
+                                        @Html.ValidationMessageFor(model => model.Price, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group  row">
+                                    <div class="col-md-6 offset-md-4">
+                                        <input type="submit" value="Create" class="btn btn-primary" />
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
+                        <div>
+                            @Html.ActionLink("Back to List", "Index")
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</main>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

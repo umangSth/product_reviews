@@ -1,0 +1,15 @@
+﻿@model IEnumerable<ProductRatingAndReview.Models.ProductTB>
+
+@foreach (var item in Model)
+{
+    <div class="col-4">
+        <div class="card shadow">
+            <img class="card-img-top" src=@Html.DisplayFor(modelItem => item.ProductImageUrl) alt="Card image cap">
+            <div class="card-body">
+                <h5 class="card-title">@Html.DisplayFor(modelItem => item.ProductName)</h5>
+                <p class="card-text"> @Html.DisplayFor(modelItem => item.ProductDetail)</p>
+                <p class="card-text"> @Html.ActionLink("detail >>", "DetailPage", new { id = item.ProductId }, new { @class = "btn btn-primary btn-sm" })</p>
+            </div>
+        </div>
+    </div>
+}

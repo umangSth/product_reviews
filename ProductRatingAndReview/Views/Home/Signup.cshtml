@@ -1,0 +1,79 @@
+﻿@model ProductRatingAndReview.Models.ViewModel.Signup
+
+@{
+    ViewBag.Title = "Signup";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<main class="my-form my-lg-5">
+    <div class="cotainer">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header"><h3>Signup</h3></div>  
+                    <div class="card-body">
+                        @using (Html.BeginForm())
+                        {
+                            @Html.AntiForgeryToken()
+
+                        <div class="form-horizontal">
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            <div class="form-group row">
+                                @Html.LabelFor(model => model.UserName, htmlAttributes: new { @class = "col-md-4 col-form-label text-md-right" })
+                                <div class="col-md-6">
+                                    @Html.TextBoxFor(model => model.UserName, new { @class = "form-control " })
+                                    @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "col-md-4 col-form-label text-md-right" })
+                                <div class="col-md-6">
+                                    @Html.TextBoxFor(model => model.Email, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                @Html.LabelFor(model => model.Password, new { @class = "col-md-4 col-form-label text-md-right" })
+                                <div class="col-md-6">
+                                    @Html.PasswordFor(model => model.Password, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                @Html.LabelFor(model => model.RePassword,  new { @class = "col-md-4 col-form-label text-md-right" })
+                                <div class="col-md-6">
+                                    @Html.PasswordFor(model => model.RePassword, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.RePassword, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-6 offset-md-4">
+                                    <input type="submit" value="Create" class="btn btn-primary" />
+                                </div>
+                            </div>
+                        </div>
+                        }
+
+                        <div>
+                            @Html.ActionLink("Back to List", "Index")
+                        </div>
+
+                    </div>
+                    </div>
+            </div>
+        </div>
+    </div>
+
+</main>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+
+
+
+     
+
+   

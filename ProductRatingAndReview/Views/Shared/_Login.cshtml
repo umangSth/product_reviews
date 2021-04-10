@@ -1,0 +1,41 @@
+﻿@model ProductRatingAndReview.Models.ViewModel.LoginViewModel
+
+<ul class="nav navbar-nav flex-row justify-content-between ml-auto">
+    <li class="nav-item order-2 order-md-1"><a href="#" class="nav-link" title="settings"><i class="fa fa-cog fa-fw fa-lg"></i></a></li>
+    <li class="dropdown order-1">
+        <button type="button" id="dropdownMenu1" data-toggle="dropdown" class="btn btn-outline-secondary dropdown-toggle">Login <span class="caret"></span></button>
+        <ul class="dropdown-menu dropdown-menu-right mt-2">
+            <li class="px-3 py-2">
+
+
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+
+                <form class="form" role="form">
+
+                    <div class="form-group">
+                        @Html.TextBoxFor(model => model.UserName, new { @class = "form-control form-control-sm", id = "UserName", required = "", placeholder = "UserName" })
+                        @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
+
+                        <!--<input id="UserName" placeholder="Email" class="form-control form-control-sm" type="text" required="">-->
+                    </div>
+                    <div class="form-group">
+                        @Html.PasswordFor(model => model.Password, new { @class = "form-control form-control-sm", id = "Password", required = "", placeholder = "Password" })
+                        @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                        <!--  <input id="passwordInput" placeholder="Password" class="form-control form-control-sm" type="text" required=""> -->
+                    </div>
+                   
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary btn-block">Login</button>
+                    </div>
+                </form>
+
+                }
+            </li>
+        </ul>
+    </li>
+</ul>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

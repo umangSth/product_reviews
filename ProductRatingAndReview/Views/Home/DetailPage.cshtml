@@ -1,0 +1,185 @@
+﻿@model ProductRatingAndReview.Models.ViewModel.ProductReviewViewModel
+
+@{
+    ViewBag.Title = "Detail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+
+    <!-- Portfolio Item Heading -->
+    <h1 class="my-4">
+        Product Detail
+    </h1>
+
+    <!-- Portfolio Item Row -->
+    <div class="row">
+
+        <div class="col-md-8">
+            <img class="img-fluid" src=@Html.DisplayFor(model => model.ProductImageUrl) alt="">
+        </div>
+
+        <div class="col-md-4">
+            <h3 class="my-3">Product Description</h3>
+            <p>
+                @Html.DisplayFor(model => model.ProductDetail)
+            </p>
+            <h3 class="my-3">Project Details</h3>
+            <ul>
+                <li id="ProductId" style="display:none;">@Html.DisplayFor(model=>model.ProductId)</li>
+                <li>Price:  @Html.DisplayFor(model => model.Price)</li>
+                <li>Name: @Html.DisplayFor(model => model.ProductName) </li>
+            </ul>
+            <hr />
+            <div class="container">
+                <h3>You can Review me!</h3>
+                <div class="star-container">
+                    <div class="star-widget">
+                        <input type="radio" name="rate" id="rate-5" value="5"/>
+                        <label for="rate-5" class="fa fa-star"></label>
+                        <input type="radio" name="rate" id="rate-4" value="4" />
+                        <label for="rate-4" class="fa fa-star"></label>
+                        <input type="radio" name="rate" id="rate-3" value="3" />
+                        <label for="rate-3" class="fa  fa-star"></label>
+                        <input type="radio" name="rate" id="rate-2" value="2" />
+                        <label for="rate-2" class="fa fa-star"></label>
+                        <input type="radio" name="rate" id="rate-1" value="1" />
+                        <label for="rate-1" class="fa  fa-star"></label>
+                        <form action="#"><header id="RateMessage"></header>
+                                         <div class="comment-area">
+                                             <textarea required id="PostMessage" cols="30" placeholder="Describe your experiences.."></textarea>
+                                             <p id="UserId" style="display:none;">@Session["UserId"]</p>
+                                             <p id="UserName" style="display:none;">@Session["UserName"]</p>
+                                         </div>
+                                <div class="btn-submit">
+                                    <button type="submit" onclick="AddReview()">Post</button>
+                                </div>
+                        </form>
+                    </div>
+                </div>
+            </div>            
+        </div>   
+    </div>
+</div>
+<div class="row d-flex justify-content-center mt-100 mb-100" id="Comment">
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-body text-center">
+                <h4 class="card-title">Latest Reviews</h4>
+            </div>
+            <div class="comment-widgets">
+                @foreach (var item in Model.RVM)
+                {
+                    <!-- Comment Row -->
+                    <div class="d-flex flex-row comment-row m-t-0">
+                        <div class="p-2"><img src="https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png" alt="user" width="50" class="rounded-circle"></div>
+                        <div class="comment-text w-100">
+                            @{
+                                int? star = item.StarNumber;
+                                for (int i = 0; i < 5; i++)
+                                {
+                                    if (star > 0)
+                                    {
+                                        <span class="fa fa-star checked"></span>
+                                    }
+                                    else
+                                    {
+                                        <span class="fa fa-star "></span>
+                                    }
+                                    --star;
+                                }
+                            }                            
+                            <h6 class="font-medium">@Html.DisplayFor(modelItem => item.UserName)</h6> <span class="m-b-15 d-block">@Html.DisplayFor(modelItem => item.Message) </span>
+                            <div class="comment-footer"> <span class="text-muted float-right"> @Html.DisplayFor(modelItem => item.Date)</span>                            
+                            @{
+                                if(Convert.ToInt32(Session["UserId"]) == item.UserId && Convert.ToString(Session["UserName"]) == item.UserName)
+                                {
+                                       <button type="button" onclick="DeletePost(@Html.DisplayFor(modelItem=>item.ReviewId))" class="btn btn-danger btn-sm">Delete</button>
+                                }
+                            }
+                             </div>
+                        </div>
+                    </div> <!-- Comment Row -->
+                }
+               
+            </div> 
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+
+    function AddReview() {
+        let ProductId = document.getElementById("ProductId").textContent;
+        let StarNumber = 0;
+        let starNum = document.getElementsByName('rate');
+        let UserId = document.getElementById('UserId').textContent;
+        let UserName = document.getElementById('UserName').textContent;
+
+        for (let i = 0; i < starNum.length; i++) {
+            if (starNum[i].checked) {
+                StarNumber = parseInt(starNum[i].value, 10);
+            }
+        }
+        let PostMessage = document.getElementById("PostMessage").value;
+         if (UserId == "" && UserName == "" ) {
+            alert("Please Signup First!!!");
+            var url = '@Url.Action("Signup", "Home")';
+             window.location.href = url;
+             return false;
+        }       
+        if (StarNumber < 1 || PostMessage == "") {
+            alert("Please Fill the review box first!!!!");
+            return false;
+        }
+        let ReviewObj = {
+            ProductId: parseInt(ProductId, 10),
+            StarNumber: StarNumber,
+            Message: PostMessage,
+            UserId: parseInt(UserId,10),
+            UserName: UserName,
+            Date: null,
+        }
+        $.ajax({
+            url: "/Home/AddReview",
+            data: JSON.stringify(ReviewObj),
+            type: "POST",
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                if (result == 1) {
+                    alert("Done!!");
+                } else {
+                    alert("Something went wrong!!")
+                }
+            },
+            error: function (errormessage) {
+                alert(errormessage.responseText);
+            }
+        })
+    }
+
+    function DeletePost(id) {
+        
+        if (confirm("Do you want to Delete the Post!!!")) {            
+            let a = parseInt(id, 10);
+            $.ajax({
+                url: `/Home/DeletePost/${a}`,
+                type: "POST",
+                contentType: "json",
+                dataType: "json",
+                success: function (result) {
+                    if (result != null) {
+                        alert("Your Post is deleted!!");
+                        location.reload("#Comment")
+                    }
+                },
+                error: function (errormessage) {
+                    alert(errormessage.responseText);
+                }
+            });
+        } 
+    }
+
+</script>

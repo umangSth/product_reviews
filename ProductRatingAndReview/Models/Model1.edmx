@@ -1,0 +1,454 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="ProductReviewDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="AggregateReviewTB">
+          <Key>
+            <PropertyRef Name="AggregateId" />
+          </Key>
+          <Property Name="AggregateId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ProductId" Type="int" />
+          <Property Name="AggregateStar" Type="int" />
+          <Property Name="CategoryId" Type="int" />
+        </EntityType>
+        <EntityType Name="CategoryTB">
+          <Key>
+            <PropertyRef Name="CategoryId" />
+          </Key>
+          <Property Name="CategoryId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CategoryName" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="ProductTB">
+          <Key>
+            <PropertyRef Name="ProductId" />
+          </Key>
+          <Property Name="ProductId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ProductName" Type="nvarchar" MaxLength="50" />
+          <Property Name="ProductDetail" Type="nvarchar(max)" />
+          <Property Name="ProductImageUrl" Type="nvarchar(max)" />
+          <Property Name="Price" Type="decimal" Precision="18" Scale="0" />
+        </EntityType>
+        <EntityType Name="ReviewTB">
+          <Key>
+            <PropertyRef Name="ReviewId" />
+          </Key>
+          <Property Name="ReviewId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ProductId" Type="int" />
+          <Property Name="UserId" Type="int" />
+          <Property Name="NumberOfStar" Type="int" />
+          <Property Name="Comment" Type="nvarchar" MaxLength="50" />
+          <Property Name="Date" Type="date" />
+        </EntityType>
+        <EntityType Name="Role">
+          <Key>
+            <PropertyRef Name="RoleId" />
+          </Key>
+          <Property Name="RoleId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RoleName" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="UserRole">
+          <Key>
+            <PropertyRef Name="UserRoleId" />
+          </Key>
+          <Property Name="UserRoleId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="int" />
+          <Property Name="RoleId" Type="int" />
+        </EntityType>
+        <EntityType Name="UserTB">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserName" Type="nvarchar" MaxLength="50" />
+          <Property Name="Email" Type="nvarchar" MaxLength="50" />
+          <Property Name="Password" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <Association Name="FK_AggregateReviewTB_CategoryTB">
+          <End Role="CategoryTB" Type="Self.CategoryTB" Multiplicity="0..1" />
+          <End Role="AggregateReviewTB" Type="Self.AggregateReviewTB" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CategoryTB">
+              <PropertyRef Name="CategoryId" />
+            </Principal>
+            <Dependent Role="AggregateReviewTB">
+              <PropertyRef Name="CategoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AggregateReviewTB_ProductTB">
+          <End Role="ProductTB" Type="Self.ProductTB" Multiplicity="0..1" />
+          <End Role="AggregateReviewTB" Type="Self.AggregateReviewTB" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProductTB">
+              <PropertyRef Name="ProductId" />
+            </Principal>
+            <Dependent Role="AggregateReviewTB">
+              <PropertyRef Name="ProductId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ReviewTB_ProductTB">
+          <End Role="ProductTB" Type="Self.ProductTB" Multiplicity="0..1" />
+          <End Role="ReviewTB" Type="Self.ReviewTB" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProductTB">
+              <PropertyRef Name="ProductId" />
+            </Principal>
+            <Dependent Role="ReviewTB">
+              <PropertyRef Name="ProductId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ReviewTB_UserTB">
+          <End Role="UserTB" Type="Self.UserTB" Multiplicity="0..1" />
+          <End Role="ReviewTB" Type="Self.ReviewTB" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserTB">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="ReviewTB">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserRole_Role">
+          <End Role="Role" Type="Self.Role" Multiplicity="0..1" />
+          <End Role="UserRole" Type="Self.UserRole" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Role">
+              <PropertyRef Name="RoleId" />
+            </Principal>
+            <Dependent Role="UserRole">
+              <PropertyRef Name="RoleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserRole_UserTB">
+          <End Role="UserTB" Type="Self.UserTB" Multiplicity="0..1" />
+          <End Role="UserRole" Type="Self.UserRole" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserTB">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="UserRole">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ProductReviewDBModelStoreContainer">
+          <EntitySet Name="AggregateReviewTB" EntityType="Self.AggregateReviewTB" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CategoryTB" EntityType="Self.CategoryTB" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ProductTB" EntityType="Self.ProductTB" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ReviewTB" EntityType="Self.ReviewTB" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Role" EntityType="Self.Role" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserRole" EntityType="Self.UserRole" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserTB" EntityType="Self.UserTB" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_AggregateReviewTB_CategoryTB" Association="Self.FK_AggregateReviewTB_CategoryTB">
+            <End Role="CategoryTB" EntitySet="CategoryTB" />
+            <End Role="AggregateReviewTB" EntitySet="AggregateReviewTB" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AggregateReviewTB_ProductTB" Association="Self.FK_AggregateReviewTB_ProductTB">
+            <End Role="ProductTB" EntitySet="ProductTB" />
+            <End Role="AggregateReviewTB" EntitySet="AggregateReviewTB" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ReviewTB_ProductTB" Association="Self.FK_ReviewTB_ProductTB">
+            <End Role="ProductTB" EntitySet="ProductTB" />
+            <End Role="ReviewTB" EntitySet="ReviewTB" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ReviewTB_UserTB" Association="Self.FK_ReviewTB_UserTB">
+            <End Role="UserTB" EntitySet="UserTB" />
+            <End Role="ReviewTB" EntitySet="ReviewTB" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserRole_Role" Association="Self.FK_UserRole_Role">
+            <End Role="Role" EntitySet="Role" />
+            <End Role="UserRole" EntitySet="UserRole" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserRole_UserTB" Association="Self.FK_UserRole_UserTB">
+            <End Role="UserTB" EntitySet="UserTB" />
+            <End Role="UserRole" EntitySet="UserRole" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ProductReviewDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="AggregateReviewTB">
+          <Key>
+            <PropertyRef Name="AggregateId" />
+          </Key>
+          <Property Name="AggregateId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProductId" Type="Int32" />
+          <Property Name="AggregateStar" Type="Int32" />
+          <Property Name="CategoryId" Type="Int32" />
+          <NavigationProperty Name="CategoryTB" Relationship="Self.FK_AggregateReviewTB_CategoryTB" FromRole="AggregateReviewTB" ToRole="CategoryTB" />
+          <NavigationProperty Name="ProductTB" Relationship="Self.FK_AggregateReviewTB_ProductTB" FromRole="AggregateReviewTB" ToRole="ProductTB" />
+        </EntityType>
+        <EntityType Name="CategoryTB">
+          <Key>
+            <PropertyRef Name="CategoryId" />
+          </Key>
+          <Property Name="CategoryId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CategoryName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AggregateReviewTBs" Relationship="Self.FK_AggregateReviewTB_CategoryTB" FromRole="CategoryTB" ToRole="AggregateReviewTB" />
+        </EntityType>
+        <EntityType Name="ProductTB">
+          <Key>
+            <PropertyRef Name="ProductId" />
+          </Key>
+          <Property Name="ProductId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProductName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ProductDetail" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ProductImageUrl" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Price" Type="Decimal" Precision="18" Scale="0" />
+          <NavigationProperty Name="AggregateReviewTBs" Relationship="Self.FK_AggregateReviewTB_ProductTB" FromRole="ProductTB" ToRole="AggregateReviewTB" />
+          <NavigationProperty Name="ReviewTBs" Relationship="Self.FK_ReviewTB_ProductTB" FromRole="ProductTB" ToRole="ReviewTB" />
+        </EntityType>
+        <EntityType Name="ReviewTB">
+          <Key>
+            <PropertyRef Name="ReviewId" />
+          </Key>
+          <Property Name="ReviewId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProductId" Type="Int32" />
+          <Property Name="UserId" Type="Int32" />
+          <Property Name="NumberOfStar" Type="Int32" />
+          <Property Name="Comment" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Date" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="ProductTB" Relationship="Self.FK_ReviewTB_ProductTB" FromRole="ReviewTB" ToRole="ProductTB" />
+          <NavigationProperty Name="UserTB" Relationship="Self.FK_ReviewTB_UserTB" FromRole="ReviewTB" ToRole="UserTB" />
+        </EntityType>
+        <EntityType Name="Role">
+          <Key>
+            <PropertyRef Name="RoleId" />
+          </Key>
+          <Property Name="RoleId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RoleName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="UserRoles" Relationship="Self.FK_UserRole_Role" FromRole="Role" ToRole="UserRole" />
+        </EntityType>
+        <EntityType Name="UserRole">
+          <Key>
+            <PropertyRef Name="UserRoleId" />
+          </Key>
+          <Property Name="UserRoleId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="Int32" />
+          <Property Name="RoleId" Type="Int32" />
+          <NavigationProperty Name="Role" Relationship="Self.FK_UserRole_Role" FromRole="UserRole" ToRole="Role" />
+          <NavigationProperty Name="UserTB" Relationship="Self.FK_UserRole_UserTB" FromRole="UserRole" ToRole="UserTB" />
+        </EntityType>
+        <EntityType Name="UserTB">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="ReviewTBs" Relationship="Self.FK_ReviewTB_UserTB" FromRole="UserTB" ToRole="ReviewTB" />
+          <NavigationProperty Name="UserRoles" Relationship="Self.FK_UserRole_UserTB" FromRole="UserTB" ToRole="UserRole" />
+        </EntityType>
+        <Association Name="FK_AggregateReviewTB_CategoryTB">
+          <End Role="CategoryTB" Type="Self.CategoryTB" Multiplicity="0..1" />
+          <End Role="AggregateReviewTB" Type="Self.AggregateReviewTB" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CategoryTB">
+              <PropertyRef Name="CategoryId" />
+            </Principal>
+            <Dependent Role="AggregateReviewTB">
+              <PropertyRef Name="CategoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AggregateReviewTB_ProductTB">
+          <End Role="ProductTB" Type="Self.ProductTB" Multiplicity="0..1" />
+          <End Role="AggregateReviewTB" Type="Self.AggregateReviewTB" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProductTB">
+              <PropertyRef Name="ProductId" />
+            </Principal>
+            <Dependent Role="AggregateReviewTB">
+              <PropertyRef Name="ProductId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ReviewTB_ProductTB">
+          <End Role="ProductTB" Type="Self.ProductTB" Multiplicity="0..1" />
+          <End Role="ReviewTB" Type="Self.ReviewTB" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProductTB">
+              <PropertyRef Name="ProductId" />
+            </Principal>
+            <Dependent Role="ReviewTB">
+              <PropertyRef Name="ProductId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ReviewTB_UserTB">
+          <End Role="UserTB" Type="Self.UserTB" Multiplicity="0..1" />
+          <End Role="ReviewTB" Type="Self.ReviewTB" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserTB">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="ReviewTB">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserRole_Role">
+          <End Role="Role" Type="Self.Role" Multiplicity="0..1" />
+          <End Role="UserRole" Type="Self.UserRole" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Role">
+              <PropertyRef Name="RoleId" />
+            </Principal>
+            <Dependent Role="UserRole">
+              <PropertyRef Name="RoleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserRole_UserTB">
+          <End Role="UserTB" Type="Self.UserTB" Multiplicity="0..1" />
+          <End Role="UserRole" Type="Self.UserRole" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserTB">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="UserRole">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ProductReviewDBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="AggregateReviewTBs" EntityType="Self.AggregateReviewTB" />
+          <EntitySet Name="CategoryTBs" EntityType="Self.CategoryTB" />
+          <EntitySet Name="ProductTBs" EntityType="Self.ProductTB" />
+          <EntitySet Name="ReviewTBs" EntityType="Self.ReviewTB" />
+          <EntitySet Name="Roles" EntityType="Self.Role" />
+          <EntitySet Name="UserRoles" EntityType="Self.UserRole" />
+          <EntitySet Name="UserTBs" EntityType="Self.UserTB" />
+          <AssociationSet Name="FK_AggregateReviewTB_CategoryTB" Association="Self.FK_AggregateReviewTB_CategoryTB">
+            <End Role="CategoryTB" EntitySet="CategoryTBs" />
+            <End Role="AggregateReviewTB" EntitySet="AggregateReviewTBs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AggregateReviewTB_ProductTB" Association="Self.FK_AggregateReviewTB_ProductTB">
+            <End Role="ProductTB" EntitySet="ProductTBs" />
+            <End Role="AggregateReviewTB" EntitySet="AggregateReviewTBs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ReviewTB_ProductTB" Association="Self.FK_ReviewTB_ProductTB">
+            <End Role="ProductTB" EntitySet="ProductTBs" />
+            <End Role="ReviewTB" EntitySet="ReviewTBs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ReviewTB_UserTB" Association="Self.FK_ReviewTB_UserTB">
+            <End Role="UserTB" EntitySet="UserTBs" />
+            <End Role="ReviewTB" EntitySet="ReviewTBs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserRole_Role" Association="Self.FK_UserRole_Role">
+            <End Role="Role" EntitySet="Roles" />
+            <End Role="UserRole" EntitySet="UserRoles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserRole_UserTB" Association="Self.FK_UserRole_UserTB">
+            <End Role="UserTB" EntitySet="UserTBs" />
+            <End Role="UserRole" EntitySet="UserRoles" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ProductReviewDBModelStoreContainer" CdmEntityContainer="ProductReviewDBEntities">
+          <EntitySetMapping Name="AggregateReviewTBs">
+            <EntityTypeMapping TypeName="ProductReviewDBModel.AggregateReviewTB">
+              <MappingFragment StoreEntitySet="AggregateReviewTB">
+                <ScalarProperty Name="AggregateId" ColumnName="AggregateId" />
+                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+                <ScalarProperty Name="AggregateStar" ColumnName="AggregateStar" />
+                <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CategoryTBs">
+            <EntityTypeMapping TypeName="ProductReviewDBModel.CategoryTB">
+              <MappingFragment StoreEntitySet="CategoryTB">
+                <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
+                <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ProductTBs">
+            <EntityTypeMapping TypeName="ProductReviewDBModel.ProductTB">
+              <MappingFragment StoreEntitySet="ProductTB">
+                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
+                <ScalarProperty Name="ProductDetail" ColumnName="ProductDetail" />
+                <ScalarProperty Name="ProductImageUrl" ColumnName="ProductImageUrl" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ReviewTBs">
+            <EntityTypeMapping TypeName="ProductReviewDBModel.ReviewTB">
+              <MappingFragment StoreEntitySet="ReviewTB">
+                <ScalarProperty Name="ReviewId" ColumnName="ReviewId" />
+                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="NumberOfStar" ColumnName="NumberOfStar" />
+                <ScalarProperty Name="Comment" ColumnName="Comment" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Roles">
+            <EntityTypeMapping TypeName="ProductReviewDBModel.Role">
+              <MappingFragment StoreEntitySet="Role">
+                <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+                <ScalarProperty Name="RoleName" ColumnName="RoleName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserRoles">
+            <EntityTypeMapping TypeName="ProductReviewDBModel.UserRole">
+              <MappingFragment StoreEntitySet="UserRole">
+                <ScalarProperty Name="UserRoleId" ColumnName="UserRoleId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserTBs">
+            <EntityTypeMapping TypeName="ProductReviewDBModel.UserTB">
+              <MappingFragment StoreEntitySet="UserTB">
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

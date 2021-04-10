@@ -1,0 +1,53 @@
+﻿@model IEnumerable<ProductRatingAndReview.Models.ProductTB>
+
+@{
+    ViewBag.Title = "Page";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<!--top section-->
+<div class="jumbotron">
+    <div class="container">
+        <div class="topSection">
+            <h1>Look at our Product!!</h1>
+            <p>
+                If you can keep your head when all about you
+                Are losing theirs and blaming it on you,
+                If you can trust yourself when all men doubt you,
+                But make allowance for their doubting too;
+                If you can wait and not be tired by waiting,
+                Or being lied about, don’t deal in lies,
+                Or being hated, don’t give way to hating,
+                And yet don’t look too good, nor talk too wise.
+            </p>
+            <p><a class="btn btn-primary btn-lg" role="button">Learn more »</a></p>
+        </div>
+    </div>
+</div>
+<div class="container my-5 text-center">    
+    @Ajax.ActionLink("All Product", "All","Home", new AjaxOptions{HttpMethod = "Post", UpdateTargetId = "ProductList",InsertionMode = InsertionMode.Replace, LoadingElementId = "loading", LoadingElementDuration = 800,}, new { @class = "btn btn-lg btn-outline-primary mx-3"  })
+    @Ajax.ActionLink("Good", "GoodProduct", "Home", new AjaxOptions { HttpMethod = "Post", UpdateTargetId = "ProductList", InsertionMode = InsertionMode.Replace, LoadingElementId = "loading", LoadingElementDuration = 800 },new { @class = "btn btn-lg btn-outline-success mx-3" })
+    @Ajax.ActionLink("Bad", "BadProduct", "Home", new AjaxOptions { HttpMethod = "Post", UpdateTargetId = "ProductList", InsertionMode = InsertionMode.Replace, LoadingElementId = "loading", LoadingElementDuration = 800 }, new { @class = "btn btn-lg btn-outline-warning mx-3" })
+    @Ajax.ActionLink("Worst", "WorstProduct", "Home", new AjaxOptions { HttpMethod = "Post", UpdateTargetId = "ProductList", InsertionMode = InsertionMode.Replace, LoadingElementId = "loading", LoadingElementDuration = 800 }, new { @class = "btn btn-lg btn-outline-danger mx-3" })
+</div>
+
+<div class="container my-5">
+
+    <div class="row mb-5" id="ProductList">
+        @foreach (var item in Model)
+        {
+            <div class="col-4">
+                <div class="card shadow">
+                    <img class="card-img-top" src=@Html.DisplayFor(modelItem => item.ProductImageUrl) alt="Card image cap">
+                    <div class="card-body">
+                        <h5 class="card-title">@Html.DisplayFor(modelItem => item.ProductName)</h5>
+                        <p class="card-text"> @Html.DisplayFor(modelItem => item.ProductDetail)</p>
+                        <p class="card-text"> @Html.ActionLink("detail >>", "DetailPage", new { id = item.ProductId }, new { @class = "btn btn-primary btn-sm" })</p>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
